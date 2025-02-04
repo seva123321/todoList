@@ -1,7 +1,7 @@
 import Button from "../../UI/Button/Button";
 import './TaskFilter.css'
 
-const TaskFilter =(props) =>{
+const TaskFilter =() =>{
   return (
       <ul className="filters">
         <li>

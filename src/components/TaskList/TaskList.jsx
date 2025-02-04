@@ -1,6 +1,7 @@
 import "./TaskList.css";
 import Task from "../Task";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const TaskList = ({ todos, onDeleteItem }) => {
   const [completedTasks, setCompletedTasks] = useState([]);
@@ -35,4 +36,20 @@ const TaskList = ({ todos, onDeleteItem }) => {
   return <ul className="todo-list">{elements}</ul>;
 };
 
+// Валидация пропсов
+TaskList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      description: PropTypes.string,
+      created: PropTypes.string,
+    })
+  ), //.isRequired,
+  onDeleteItem: PropTypes.func,
+};
+
+TaskList.defaultProps = {
+  todos: {},
+  onDeleteItem: () => {},
+};
 export default TaskList;

@@ -1,9 +1,9 @@
-import React from "react";
+// import React from "react";
 import TaskFilter from "../TasksFilter";
 import './Footer.css'
 import Button from "../../UI/Button/Button";
 
-const Footer = (props) => {
+const Footer = () => {
   return (
     <footer className="footer">
       <span className="todo-count">1 items left</span>

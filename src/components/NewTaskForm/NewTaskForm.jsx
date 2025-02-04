@@ -1,7 +1,7 @@
 import Input from "../../UI/Input/Input";
 import "./NewTaskForm.css";
 
-const NewTaskForm =(props)=> {
+const NewTaskForm =()=> {
   return (
     <header className="header">
       <h1>todos</h1>

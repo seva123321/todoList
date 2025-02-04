@@ -1,12 +1,12 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import Button from "../../UI/Button/Button";
 import Input from "../../UI/Input/Input";
-
 import "./Task.css";
 
 const Task = ({ id, description, created, onDeleteItem, onComplite }) => {
   const [completed, setCompleted] = useState(false);
-  
+
   const handleChange = () => {
     const newCompleted = !completed;
     setCompleted(newCompleted);
@@ -32,6 +32,14 @@ const Task = ({ id, description, created, onDeleteItem, onComplite }) => {
       ></Button>
     </div>
   );
+};
+
+Task.propTypes = {
+  id: PropTypes.number,
+  description: PropTypes.string,
+  created: PropTypes.string,
+  onDeleteItem: PropTypes.func,
+  onComplite: PropTypes.func,
 };
 
 export default Task;
