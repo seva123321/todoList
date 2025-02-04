@@ -1,22 +1,22 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "../../UI/Button/Button";
 import Input from "../../UI/Input/Input";
 import "./Task.css";
 
-const Task = ({ id, description, created, onDeleteItem, onComplite }) => {
-  const [completed, setCompleted] = useState(false);
-
-  const handleChange = () => {
-    const newCompleted = !completed;
-    setCompleted(newCompleted);
-    onComplite(id, newCompleted);
-  };
-
+const Task = ({
+  id,
+  description,
+  created,
+  onDeleteItem,
+  onComplite,
+  completed,
+}) => {
   return (
     <div className="view">
       <Input
-        onChange={handleChange}
+        onChange={
+          () => onComplite(id, !completed) // Уведомляем родителя об изменении состояния
+        }
         className="toggle"
         type="checkbox"
         checked={completed}
@@ -40,6 +40,7 @@ Task.propTypes = {
   created: PropTypes.string,
   onDeleteItem: PropTypes.func,
   onComplite: PropTypes.func,
+  completed: PropTypes.bool, 
 };
 
 export default Task;

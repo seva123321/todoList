@@ -3,7 +3,7 @@ import Task from "../Task";
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const TaskList = ({ todos, onDeleteItem }) => {
+const TaskList = ({ todos = [], onDeleteItem = () => {} }) => {
   const [completedTasks, setCompletedTasks] = useState([]);
 
   const handleCheckComplite = (idItem, completed) => {
@@ -20,7 +20,7 @@ const TaskList = ({ todos, onDeleteItem }) => {
   const elements = todos.map((item) => {
     const { id, ...itemProps } = item;
 
-    const isCompleted = completedTasks.includes(id); // Проверяем, завершена ли задача
+    const isCompleted = completedTasks.includes(id); 
     return (
       <li key={id} className={isCompleted ? "completed" : undefined}>
         <Task
@@ -28,6 +28,7 @@ const TaskList = ({ todos, onDeleteItem }) => {
           id={id}
           onDeleteItem={onDeleteItem}
           onComplite={handleCheckComplite}
+          completed={isCompleted} 
         />
       </li>
     );
@@ -36,7 +37,6 @@ const TaskList = ({ todos, onDeleteItem }) => {
   return <ul className="todo-list">{elements}</ul>;
 };
 
-// Валидация пропсов
 TaskList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
@@ -44,12 +44,8 @@ TaskList.propTypes = {
       description: PropTypes.string,
       created: PropTypes.string,
     })
-  ), //.isRequired,
+  ),
   onDeleteItem: PropTypes.func,
 };
 
-TaskList.defaultProps = {
-  todos: {},
-  onDeleteItem: () => {},
-};
 export default TaskList;

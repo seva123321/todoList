@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import "./Button.css";
 
-const Button = ({ className, children, onClick, ...attrs }) => {
+const Button = ({ className ='', children = '', onClick=()=>{}, ...attrs }) => {
   return (
     <button {...attrs} className={className} onClick={onClick}>
       {children}
@@ -15,10 +15,5 @@ Button.propTypes = {
   onClick: PropTypes.func,
 };
 
-Button.defaultProps = {
-  className: '',
-  children:'Кнопка',
-  onClick: ()=>{}
-}
 
 export default Button;
