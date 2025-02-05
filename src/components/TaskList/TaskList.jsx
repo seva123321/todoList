@@ -1,34 +1,25 @@
 import "./TaskList.css";
 import Task from "../Task";
-import { useState } from "react";
 import PropTypes from "prop-types";
 
-const TaskList = ({ todos = [], onDeleteItem = () => {} }) => {
-  const [completedTasks, setCompletedTasks] = useState([]);
-
-  const handleCheckComplite = (idItem, completed) => {
-    setCompletedTasks((prev) => {
-      if (!completed) {
-        // Если задача не завершена, удаляем её из массива
-        return prev.filter((id) => id !== idItem);
-      }
-      // Если задача завершена, добавляем её в массив
-      return [...prev, idItem];
-    });
-  };
-
+const TaskList = ({
+  todos = [],
+  onDeleteItem = () => {},
+  onToggleDone = () => {},
+}) => {
   const elements = todos.map((item) => {
-    const { id, ...itemProps } = item;
+    const { id, completed, ...itemProps } = item;
 
-    const isCompleted = completedTasks.includes(id); 
+    const className = completed ? "completed" : undefined;
+    console.log(className);
+    
     return (
-      <li key={id} className={isCompleted ? "completed" : undefined}>
+      <li key={id} className={className}>
         <Task
           {...itemProps}
           id={id}
-          onDeleteItem={onDeleteItem}
-          onComplite={handleCheckComplite}
-          completed={isCompleted} 
+          onDeleteItem={() => onDeleteItem(id)}
+          onToggleDone={() => onToggleDone(id)}
         />
       </li>
     );
@@ -46,6 +37,7 @@ TaskList.propTypes = {
     })
   ),
   onDeleteItem: PropTypes.func,
+  onToggleDone: PropTypes.func,
 };
 
 export default TaskList;

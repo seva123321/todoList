@@ -4,43 +4,34 @@ import Input from "../../UI/Input/Input";
 import "./Task.css";
 
 const Task = ({
-  id,
   description,
   created,
   onDeleteItem,
-  onComplite,
-  completed,
+  onToggleDone,
 }) => {
   return (
     <div className="view">
       <Input
-        onChange={
-          () => onComplite(id, !completed) // Уведомляем родителя об изменении состояния
-        }
         className="toggle"
         type="checkbox"
-        checked={completed}
+        onChange={onToggleDone}
       />
       <label>
         <span className="description">{description}</span>
         <span className="created">{created}</span>
       </label>
       <Button className="icon icon-edit"></Button>
-      <Button
-        className="icon icon-destroy"
-        onClick={() => onDeleteItem(id)}
-      ></Button>
+      <Button className="icon icon-destroy" onClick={onDeleteItem}></Button>
     </div>
   );
 };
 
 Task.propTypes = {
-  id: PropTypes.number,
   description: PropTypes.string,
   created: PropTypes.string,
   onDeleteItem: PropTypes.func,
   onComplite: PropTypes.func,
-  completed: PropTypes.bool, 
+  onToggleDone: PropTypes.func,
 };
 
 export default Task;
