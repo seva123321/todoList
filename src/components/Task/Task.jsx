@@ -6,6 +6,7 @@ import "./Task.css";
 const Task = ({
   description,
   created,
+  checked,
   onDeleteItem,
   onToggleDone,
 }) => {
@@ -15,6 +16,7 @@ const Task = ({
         className="toggle"
         type="checkbox"
         onChange={onToggleDone}
+        checked ={checked}
       />
       <label>
         <span className="description">{description}</span>
@@ -29,6 +31,7 @@ const Task = ({
 Task.propTypes = {
   description: PropTypes.string,
   created: PropTypes.string,
+  checked: PropTypes.bool,
   onDeleteItem: PropTypes.func,
   onComplite: PropTypes.func,
   onToggleDone: PropTypes.func,

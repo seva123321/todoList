@@ -11,13 +11,13 @@ const TaskList = ({
     const { id, completed, ...itemProps } = item;
 
     const className = completed ? "completed" : undefined;
-    console.log(className);
     
     return (
       <li key={id} className={className}>
         <Task
           {...itemProps}
           id={id}
+          checked={completed}
           onDeleteItem={() => onDeleteItem(id)}
           onToggleDone={() => onToggleDone(id)}
         />

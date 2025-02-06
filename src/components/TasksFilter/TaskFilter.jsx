@@ -1,20 +1,42 @@
+import PropTypes from "prop-types";
 import Button from "../../UI/Button/Button";
-import './TaskFilter.css'
+import "./TaskFilter.css";
 
-const TaskFilter =() =>{
+const TaskFilter = ({ onFilterTasks, selected }) => {
+
   return (
-      <ul className="filters">
-        <li>
-          <Button className="selected">All</Button>
-        </li>
-        <li>
-          <Button>Active</Button>
-        </li>
-        <li>
-          <Button>Completed</Button>
-        </li>
-      </ul>
+    <ul className="filters">
+      <li>
+        <Button
+          className={selected === "all" ? "selected" : undefined}
+          onClick={() => onFilterTasks("all")}
+        >
+          All
+        </Button>
+      </li>
+      <li>
+        <Button
+          className={selected === "active" ? "selected" : undefined}
+          onClick={() => onFilterTasks("active")}
+        >
+          Active
+        </Button>
+      </li>
+      <li>
+        <Button
+          className={selected === "completed" ? "selected" : undefined}
+          onClick={() => onFilterTasks("completed")}
+        >
+          Completed
+        </Button>
+      </li>
+    </ul>
   );
-}
+};
+
+TaskFilter.propTypes = {
+  onFilterTasks: PropTypes.func,
+  selected: PropTypes.string
+};
 
 export default TaskFilter;
