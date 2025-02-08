@@ -8,15 +8,16 @@ const TaskList = ({
   onToggleDone = () => {},
 }) => {
   const elements = todos.map((item) => {
-    const { id, completed, ...itemProps } = item;
+    const { id, completed, created, ...itemProps } = item;
 
     const className = completed ? "completed" : undefined;
-    
+
     return (
       <li key={id} className={className}>
         <Task
           {...itemProps}
           id={id}
+          created={created}
           checked={completed}
           onDeleteItem={() => onDeleteItem(id)}
           onToggleDone={() => onToggleDone(id)}
@@ -33,7 +34,7 @@ TaskList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       description: PropTypes.string,
-      created: PropTypes.string,
+      created: PropTypes.instanceOf(Date),
     })
   ),
   onDeleteItem: PropTypes.func,

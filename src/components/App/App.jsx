@@ -1,74 +1,110 @@
 import TaskList from "../TaskList/TaskList";
 import NewTaskForm from "../NewTaskForm";
-import { formatDistanceToNow } from "date-fns";
 import Footer from "../Footer";
 import "./App.css";
-import { useState } from "react";
+import { useState, useReducer } from "react";
 
 const tasks = [
   {
     id: 1,
     description: "Completed task",
-    created: `created ${formatDistanceToNow(Date.now())} ago`,
+    created: new Date(),
     completed: false,
   },
   {
     id: 2,
     description: "Editing task",
-    created: `created ${formatDistanceToNow(Date.now())} ago`,
+    created: new Date(),
+
     completed: false,
   },
   {
     id: 3,
     description: "Active task",
-    created: `created ${formatDistanceToNow(Date.now())} ago`,
+    created: new Date(),
+
     completed: false,
   },
 ];
 
+function reducer(todoData, action) {
+  switch (action.type) {
+    case "added": {
+      return [
+        ...todoData,
+        {
+          id: action.id,
+          description: action.description,
+          created: new Date(),
+          completed: false,
+        },
+      ];
+    }
+
+    case "toggle_done": {
+      const index = todoData.findIndex((item) => item.id === action.id);
+      const oldItem = todoData[index];
+      const newItem = { ...oldItem, completed: !oldItem.completed };
+
+      return [
+        ...todoData.slice(0, index),
+        newItem,
+        ...todoData.slice(index + 1),
+      ];
+    }
+
+    case "deleted": {
+      return todoData.filter((el) => el.id !== action.id);
+    }
+
+    case "all_deleted": {
+      return [];
+    }
+
+    default: {
+      throw Error("Unknown action: " + action.type);
+    }
+  }
+}
+
 const App = () => {
-  const [todoData, setTodoData] = useState(tasks);
+  const [todoData, dispatch] = useReducer(reducer, tasks);
   const [maxId, setMaxId] = useState(
     [...tasks].sort((a, b) => a.id - b.id).at(-1).id
   ); // useState(3);
-  const [filter, setFilter] = useState("all"); // Состояние для текущего фильтра
+  const [filter, setFilter] = useState("all");
 
   const handleAddItem = (label) => {
-    const newItem = {
+    dispatch({
+      type: "added",
       id: maxId + 1,
       description: label,
-      created: `created ${formatDistanceToNow(Date.now())} ago`,
-      completed: false,
-    };
-
-    setTodoData((prevData) => [...prevData, newItem]);
+    });
     setMaxId((prevMaxId) => prevMaxId + 1);
   };
 
   const handleDeleteItem = (id) => {
-    setTodoData((prevData) => prevData.filter((el) => el.id !== id));
+    dispatch({
+      type: "deleted",
+      id,
+    });
   };
 
   const handleDeleteAllItems = () => {
-    setTodoData([]);
+    dispatch({
+      type: "all_deleted",
+    });
   };
 
   const handleToggleDone = (id) => {
-    setTodoData((prevData) => {
-      const index = prevData.findIndex((item) => item.id === id);
-      const oldItem = prevData[index];
-      const newItem = { ...oldItem, completed: !oldItem.completed };
-
-      return [
-        ...prevData.slice(0, index),
-        newItem,
-        ...prevData.slice(index + 1),
-      ];
+    dispatch({
+      type: "toggle_done",
+      id,
     });
   };
 
   const handleFilterTasks = (text) => {
-    setFilter(text); // Устанавливаем текущий фильтр
+    setFilter(text); 
   };
 
   // Фильтрация задач в зависимости от текущего фильтра
@@ -79,12 +115,12 @@ const App = () => {
       case "completed":
         return todoData.filter((item) => item.completed);
       default:
-        return todoData; // Все задачи
+        return todoData;
     }
   };
 
-  const todoCount = todoData.filter(item=> !item.completed).length
-  
+  const todoCount = todoData.filter((item) => !item.completed).length;
+
   return (
     <section className="todoapp">
       <NewTaskForm onAddItem={handleAddItem} />
