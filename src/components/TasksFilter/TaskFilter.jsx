@@ -3,7 +3,6 @@ import Button from "../../UI/Button/Button";
 import "./TaskFilter.css";
 
 const TaskFilter = ({ onFilterTasks, selected }) => {
-
   return (
     <ul className="filters">
       <li>
@@ -35,8 +34,8 @@ const TaskFilter = ({ onFilterTasks, selected }) => {
 };
 
 TaskFilter.propTypes = {
+  selected: PropTypes.oneOf(["all", "active", "completed"]),
   onFilterTasks: PropTypes.func,
-  selected: PropTypes.string
 };
 
 export default TaskFilter;

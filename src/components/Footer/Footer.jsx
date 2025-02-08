@@ -11,6 +11,7 @@ const Footer = ({
   selected,
 }) => {
   
+  
   return (
     <footer className="footer">
       <span className="todo-count">{todoCount.toString()} items left</span>
@@ -24,7 +25,7 @@ const Footer = ({
 
 Footer.propTypes = {
   todoCount: PropTypes.number,
-  selected: PropTypes.string,
+  selected: PropTypes.oneOf(['all','active','completed']),
   onDeleteAllItems: PropTypes.func,
   onFilterTasks: PropTypes.func,
 };

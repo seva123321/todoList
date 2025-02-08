@@ -5,10 +5,10 @@ import "./Task.css";
 
 const Task = ({
   description,
-  created,
-  checked,
-  onDeleteItem,
-  onToggleDone,
+  created='',
+  checked=false,
+  onDeleteItem=()=>{},
+  onToggleDone=()=>{},
 }) => {
   return (
     <div className="view">
@@ -29,11 +29,10 @@ const Task = ({
 };
 
 Task.propTypes = {
-  description: PropTypes.string,
-  created: PropTypes.string,
+  description: PropTypes.node.isRequired,
+  created: PropTypes.node,
   checked: PropTypes.bool,
   onDeleteItem: PropTypes.func,
-  onComplite: PropTypes.func,
   onToggleDone: PropTypes.func,
 };
 
