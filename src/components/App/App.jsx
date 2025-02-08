@@ -28,7 +28,9 @@ const tasks = [
 
 const App = () => {
   const [todoData, setTodoData] = useState(tasks);
-  const [maxId, setMaxId] = useState([...tasks].sort((a, b) => a.id - b.id).at(-1).id);// useState(3);
+  const [maxId, setMaxId] = useState(
+    [...tasks].sort((a, b) => a.id - b.id).at(-1).id
+  ); // useState(3);
   const [filter, setFilter] = useState("all"); // Состояние для текущего фильтра
 
   const handleAddItem = (label) => {
@@ -45,6 +47,10 @@ const App = () => {
 
   const handleDeleteItem = (id) => {
     setTodoData((prevData) => prevData.filter((el) => el.id !== id));
+  };
+
+  const handleDeleteAllItems = () => {
+    setTodoData([]);
   };
 
   const handleToggleDone = (id) => {
@@ -76,6 +82,9 @@ const App = () => {
         return todoData; // Все задачи
     }
   };
+
+  const todoCount = todoData.filter(item=> !item.completed).length
+  
   return (
     <section className="todoapp">
       <NewTaskForm onAddItem={handleAddItem} />
@@ -85,7 +94,12 @@ const App = () => {
           onDeleteItem={handleDeleteItem}
           onToggleDone={handleToggleDone}
         />
-        <Footer onFilterTasks={handleFilterTasks} selected={filter} />
+        <Footer
+          todoCount={todoCount}
+          selected={filter}
+          onDeleteAllItems={handleDeleteAllItems}
+          onFilterTasks={handleFilterTasks}
+        />
       </section>
     </section>
   );

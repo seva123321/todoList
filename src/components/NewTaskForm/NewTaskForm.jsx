@@ -9,6 +9,7 @@ const NewTaskForm = ({ onAddItem }) => {
   const handleSubmit = (e)=> {
     e.preventDefault()
     onAddItem(label)
+    setLabel('')
   }
 
   const handleLabelChange = (e) => {
