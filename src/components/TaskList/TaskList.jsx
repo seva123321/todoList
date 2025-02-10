@@ -1,16 +1,17 @@
-import "./TaskList.css";
-import Task from "../Task";
-import PropTypes from "prop-types";
+import './TaskList.css'
+import PropTypes from 'prop-types'
 
-const TaskList = ({
+import Task from '../Task/Task'
+
+function TaskList({
   todos = [],
   onDeleteItem = () => {},
   onToggleDone = () => {},
-}) => {
+}) {
   const elements = todos.map((item) => {
-    const { id, completed, created, ...itemProps } = item;
+    const { id, completed, created, ...itemProps } = item
 
-    const className = completed ? "completed" : undefined;
+    const className = completed ? 'completed' : undefined
 
     return (
       <li key={id} className={className}>
@@ -23,11 +24,11 @@ const TaskList = ({
           onToggleDone={() => onToggleDone(id)}
         />
       </li>
-    );
-  });
+    )
+  })
 
-  return <ul className="todo-list">{elements}</ul>;
-};
+  return <ul className="todo-list">{elements}</ul>
+}
 
 TaskList.propTypes = {
   todos: PropTypes.arrayOf(
@@ -39,6 +40,6 @@ TaskList.propTypes = {
   ),
   onDeleteItem: PropTypes.func,
   onToggleDone: PropTypes.func,
-};
+}
 
-export default TaskList;
+export default TaskList
