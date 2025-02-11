@@ -29,11 +29,12 @@ function Task({
         type="checkbox"
         onChange={onToggleDone}
         checked={checked}
+        id="complitedCheck"
       />
-      <span>
+      <label htmlFor="complitedCheck">
         <span className="description">{description}</span>
         <span className="created">{`created ${timeAgo} ago`}</span>
-      </span>
+      </label>
       <Button className="icon icon-edit" />
       <Button className="icon icon-destroy" onClick={onDeleteItem} />
     </div>
