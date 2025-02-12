@@ -11,7 +11,11 @@ The TodoList application is a simple and convenient tool for managing your tasks
 
 ## Installation
 
-1. Clone the repository:
+ Clone the repository:
 
    ```bash
    git clone https://github.com/your-username/todolist.git
+
+## You can see the result at VERCEL
+
+   https://todo-list-seva.vercel.app/
