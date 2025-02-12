@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import './Input.css'
 
 function Input({ id, className = '', ...attrs }) {
-  return <input name={id} className={className} {...attrs} />
+  return <input id={id} className={className} {...attrs} />
 }
 
 Input.propTypes = {

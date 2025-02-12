@@ -1,28 +1,64 @@
+import { useState } from 'react'
 import './TaskList.css'
 import PropTypes from 'prop-types'
 
 import Task from '../Task/Task'
+import Input from '../../UI/Input/Input'
 
 function TaskList({
   todos = [],
   onDeleteItem = () => {},
+  onEditItem = () => {},
   onToggleDone = () => {},
 }) {
-  const elements = todos.map((item) => {
-    const { id, completed, created, ...itemProps } = item
+  const [isEdit, setIsEdit] = useState({ edit: false, idEdit: null })
+  const [label, setLabel] = useState('')
 
-    const className = completed ? 'completed' : undefined
+  const handleLabelChange = (e) => {
+    setLabel(e.target.value)
+  }
+
+  const handleEdit = (id, description) => {
+    setIsEdit((prev) => ({ idEdit: id, edit: !prev.edit }))
+    setLabel(description)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onEditItem(isEdit.idEdit, label)
+    setIsEdit((prev) => ({ ...prev, edit: !prev.edit }))
+  }
+
+  const elements = todos.map((item) => {
+    const { id, completed, created, description, ...itemProps } = item
+
+    const className = completed ? 'completed' : ''
 
     return (
-      <li key={id} className={className}>
+      <li
+        key={id}
+        className={isEdit.edit && isEdit.idEdit === id ? 'editing' : className}
+      >
         <Task
           {...itemProps}
           id={id}
           created={created}
           checked={completed}
+          description={description}
           onDeleteItem={() => onDeleteItem(id)}
           onToggleDone={() => onToggleDone(id)}
+          onEditItem={() => handleEdit(id, description)}
         />
+        {isEdit.edit && isEdit.idEdit === id && (
+          <form onSubmit={handleSubmit}>
+            <Input
+              type="text"
+              className="edit"
+              onChange={handleLabelChange}
+              value={label}
+            />
+          </form>
+        )}
       </li>
     )
   })
@@ -39,6 +75,7 @@ TaskList.propTypes = {
     })
   ),
   onDeleteItem: PropTypes.func,
+  onEditItem: PropTypes.func,
   onToggleDone: PropTypes.func,
 }
 

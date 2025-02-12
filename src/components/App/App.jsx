@@ -44,6 +44,7 @@ function reducer(todoData, action) {
     }
 
     case 'toggle_done': {
+      // changeArrayValues(todoData, action.id, {completed: !oldItem.completed})
       const index = todoData.findIndex((item) => item.id === action.id)
       const oldItem = todoData[index]
       const newItem = { ...oldItem, completed: !oldItem.completed }
@@ -59,6 +60,18 @@ function reducer(todoData, action) {
       return todoData.filter((el) => el.id !== action.id)
     }
 
+    case 'edited': {
+      const index = todoData.findIndex((item) => item.id === action.id)
+      const oldItem = todoData[index]
+      const newItem = { ...oldItem, description: action.description }
+
+      return [
+        ...todoData.slice(0, index),
+        newItem,
+        ...todoData.slice(index + 1),
+      ]
+    }
+
     case 'all_deleted': {
       return []
     }
@@ -68,12 +81,9 @@ function reducer(todoData, action) {
     }
   }
 }
-
 function App() {
   const [todoData, dispatch] = useReducer(reducer, tasks)
-  const [maxId, setMaxId] = useState(
-    [...tasks].sort((a, b) => a.id - b.id).at(-1).id
-  ) // useState(3)
+  const [maxId, setMaxId] = useState(Math.max(...tasks.map((task) => task.id)))
   const [filter, setFilter] = useState('all')
 
   const handleAddItem = (label) => {
@@ -89,6 +99,14 @@ function App() {
     dispatch({
       type: 'deleted',
       id,
+    })
+  }
+
+  const handleEditItem = (id, description) => {
+    dispatch({
+      type: 'edited',
+      id,
+      description,
     })
   }
 
@@ -132,6 +150,7 @@ function App() {
           todos={filteredTasks()}
           onDeleteItem={handleDeleteItem}
           onToggleDone={handleToggleDone}
+          onEditItem={handleEditItem}
         />
         <Footer
           todoCount={todoCount}

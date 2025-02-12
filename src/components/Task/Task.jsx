@@ -12,30 +12,33 @@ function Task({
   checked = false,
   onDeleteItem = () => {},
   onToggleDone = () => {},
+  onEditItem = () => {},
 }) {
   const [timeAgo, setTimeAgo] = useState(formatDistanceToNow(new Date(created)))
   useEffect(() => {
     const idInterval = setInterval(() => {
       setTimeAgo(formatDistanceToNow(new Date(created)))
-    }, 10000)
+    }, 30_000)
 
     return () => clearInterval(idInterval)
   }, [created])
 
+  const inputId = description.slice(0, 5) + Math.random().toFixed(3)
+
   return (
     <div className="view">
       <Input
+        id={inputId}
         className="toggle"
         type="checkbox"
         onChange={onToggleDone}
         checked={checked}
-        id="complitedCheck"
       />
-      <label htmlFor="complitedCheck">
+      <label htmlFor={inputId}>
         <span className="description">{description}</span>
         <span className="created">{`created ${timeAgo} ago`}</span>
       </label>
-      <Button className="icon icon-edit" />
+      <Button className="icon icon-edit" onClick={onEditItem} />
       <Button className="icon icon-destroy" onClick={onDeleteItem} />
     </div>
   )

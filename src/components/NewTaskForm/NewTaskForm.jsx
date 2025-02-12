@@ -23,6 +23,7 @@ function NewTaskForm({ onAddItem }) {
       <h1>todos</h1>
       <form onSubmit={handleSubmit}>
         <Input
+          id="new-todo"
           className="new-todo"
           placeholder="What needs to be done?"
           autoFocus
