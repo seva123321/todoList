@@ -35,7 +35,12 @@ function Task({
         checked={checked}
       />
       <label htmlFor={inputId}>
-        <span className="description">{description}</span>
+        <span className="title">{description}</span>
+        <span className="description">
+          <Button className="icon icon-play" />
+          <Button className="icon icon-pause" />
+          12:25
+        </span>
         <span className="created">{`created ${timeAgo} ago`}</span>
       </label>
       <Button className="icon icon-edit" onClick={onEditItem} />

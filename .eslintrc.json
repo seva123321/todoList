@@ -32,6 +32,10 @@
         "ArrayExpression": 1
       }
     ],
+    "no-underscore-dangle": [
+      "error",
+      { "allowAfterThis": true, "allowAfterSuper": true }
+    ],
     "prettier/prettier": "error",
     "linebreak-style": [0, "unix"],
     "quotes": ["error", "single"],
