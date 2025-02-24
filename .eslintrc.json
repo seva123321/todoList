@@ -46,7 +46,7 @@
       {
         "arrays": "always-multiline",
         "objects": "always-multiline",
-        "imports": "never",
+        "imports": "ignore",
         "exports": "never",
         "functions": "ignore"
       }

@@ -3,20 +3,13 @@ import { useState, useEffect, useReducer } from 'react'
 import TaskList from '../TaskList/TaskList'
 import NewTaskForm from '../NewTaskForm/NewTaskForm'
 import Footer from '../Footer/Footer'
+import {
+  setNewValue,
+  timeToSeconds,
+  secondsToTime,
+} from '../../../utils/utilsFunctions'
 
 import './App.css'
-
-function timeToSeconds(time) {
-  const [hours, minutes, seconds] = time.split(':').map(Number)
-  return hours * 3600 + minutes * 60 + seconds
-}
-
-function secondsToTime(seconds) {
-  const hours = Math.floor(seconds / 3600)
-  const minutes = Math.floor((seconds % 3600) / 60)
-  const secs = seconds % 60
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
-}
 
 const tasks = [
   {
@@ -60,56 +53,18 @@ function reducer(todoData, action) {
     }
 
     case 'toggle_done': {
-      const index = todoData.findIndex((item) => item.id === action.id)
-      const oldItem = todoData[index]
-      const newItem = { ...oldItem, completed: !oldItem.completed }
-
-      return [
-        ...todoData.slice(0, index),
-        newItem,
-        ...todoData.slice(index + 1),
-      ]
+      return setNewValue(todoData, action, 'completed')
     }
 
     case 'isplay_timer': {
-      const index = todoData.findIndex((item) => item.id === action.id)
-      const oldItem = todoData[index]
-      const newItem = {
-        ...oldItem,
-        play: !oldItem.play,
-      }
-
-      return [
-        ...todoData.slice(0, index),
-        newItem,
-        ...todoData.slice(index + 1),
-      ]
+      return setNewValue(todoData, action, 'play')
     }
     case 'update_timer': {
-      const index = todoData.findIndex((item) => item.id === action.id)
-      const oldItem = todoData[index]
-      const newItem = {
-        ...oldItem,
-        timer: action.timer,
-      }
-
-      return [
-        ...todoData.slice(0, index),
-        newItem,
-        ...todoData.slice(index + 1),
-      ]
+      return setNewValue(todoData, action)
     }
 
     case 'edited': {
-      const index = todoData.findIndex((item) => item.id === action.id)
-      const oldItem = todoData[index]
-      const newItem = { ...oldItem, description: action.description }
-
-      return [
-        ...todoData.slice(0, index),
-        newItem,
-        ...todoData.slice(index + 1),
-      ]
+      return setNewValue(todoData, action)
     }
 
     case 'deleted': {
