@@ -12,10 +12,7 @@ function Footer({
 }) {
   return (
     <footer className="footer">
-      <span className="todo-count">
-        {todoCount.toString()}
-        items left
-      </span>
+      <span className="todo-count">{`${todoCount.toString()} items left`}</span>
       <TaskFilter onFilterTasks={onFilterTasks} selected={selected} />
       <Button className="clear-completed" onClick={onDeleteAllItems}>
         Clear completed

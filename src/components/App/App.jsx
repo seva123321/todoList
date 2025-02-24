@@ -1,4 +1,4 @@
-import { useState, useReducer } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 
 import TaskList from '../TaskList/TaskList'
 import NewTaskForm from '../NewTaskForm/NewTaskForm'
@@ -6,25 +6,41 @@ import Footer from '../Footer/Footer'
 
 import './App.css'
 
+function timeToSeconds(time) {
+  const [hours, minutes, seconds] = time.split(':').map(Number)
+  return hours * 3600 + minutes * 60 + seconds
+}
+
+function secondsToTime(seconds) {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const secs = seconds % 60
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+}
+
 const tasks = [
   {
     id: 1,
     description: 'Completed task',
     created: new Date(),
+    timer: new Date().toLocaleTimeString(),
+    play: false,
     completed: false,
   },
   {
     id: 2,
     description: 'Editing task',
     created: new Date(),
-
+    timer: new Date().toLocaleTimeString(),
+    play: false,
     completed: false,
   },
   {
     id: 3,
     description: 'Active task',
     created: new Date(),
-
+    timer: new Date().toLocaleTimeString(),
+    play: false,
     completed: false,
   },
 ]
@@ -44,7 +60,6 @@ function reducer(todoData, action) {
     }
 
     case 'toggle_done': {
-      // changeArrayValues(todoData, action.id, {completed: !oldItem.completed})
       const index = todoData.findIndex((item) => item.id === action.id)
       const oldItem = todoData[index]
       const newItem = { ...oldItem, completed: !oldItem.completed }
@@ -56,8 +71,33 @@ function reducer(todoData, action) {
       ]
     }
 
-    case 'deleted': {
-      return todoData.filter((el) => el.id !== action.id)
+    case 'isplay_timer': {
+      const index = todoData.findIndex((item) => item.id === action.id)
+      const oldItem = todoData[index]
+      const newItem = {
+        ...oldItem,
+        play: !oldItem.play,
+      }
+
+      return [
+        ...todoData.slice(0, index),
+        newItem,
+        ...todoData.slice(index + 1),
+      ]
+    }
+    case 'update_timer': {
+      const index = todoData.findIndex((item) => item.id === action.id)
+      const oldItem = todoData[index]
+      const newItem = {
+        ...oldItem,
+        timer: action.timer,
+      }
+
+      return [
+        ...todoData.slice(0, index),
+        newItem,
+        ...todoData.slice(index + 1),
+      ]
     }
 
     case 'edited': {
@@ -70,6 +110,10 @@ function reducer(todoData, action) {
         newItem,
         ...todoData.slice(index + 1),
       ]
+    }
+
+    case 'deleted': {
+      return todoData.filter((el) => el.id !== action.id)
     }
 
     case 'all_deleted': {
@@ -85,6 +129,23 @@ function App() {
   const [todoData, dispatch] = useReducer(reducer, tasks)
   const [maxId, setMaxId] = useState(Math.max(...tasks.map((task) => task.id)))
   const [filter, setFilter] = useState('all')
+
+  useEffect(() => {
+    const idTimer = setInterval(() => {
+      todoData.forEach((task) => {
+        if (task.play) {
+          const currentTime = timeToSeconds(task.timer) + 1
+          dispatch({
+            type: 'update_timer',
+            id: task.id,
+            timer: secondsToTime(currentTime),
+          })
+        }
+      })
+    }, 1000)
+
+    return () => clearInterval(idTimer)
+  }, [todoData])
 
   const handleAddItem = (label) => {
     dispatch({
@@ -121,6 +182,13 @@ function App() {
     })
   }
 
+  const handleWorkTimer = (id) => {
+    dispatch({
+      type: 'isplay_timer',
+      id,
+    })
+  }
+
   const handleFilterTasks = (text) => {
     setFilter(text)
   }
@@ -151,6 +219,7 @@ function App() {
           onDeleteItem={handleDeleteItem}
           onToggleDone={handleToggleDone}
           onEditItem={handleEditItem}
+          onWorkTimer={handleWorkTimer}
         />
         <Footer
           todoCount={todoCount}

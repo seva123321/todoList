@@ -21,7 +21,7 @@ function NewTaskForm({ onAddItem }) {
   return (
     <header className="header">
       <h1>todos</h1>
-      <form onSubmit={handleSubmit}>
+      <form className="new-todo-form" onSubmit={handleSubmit}>
         <Input
           id="new-todo"
           className="new-todo"
@@ -30,6 +30,8 @@ function NewTaskForm({ onAddItem }) {
           onChange={handleLabelChange}
           value={label}
         />
+        <Input className="new-todo-form__timer" placeholder="Min" autoFocus />
+        <Input className="new-todo-form__timer" placeholder="Sec" autoFocus />
       </form>
     </header>
   )

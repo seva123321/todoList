@@ -8,13 +8,17 @@ import './Task.css'
 
 function Task({
   description,
+  timer = '00:00:00',
+  play = false,
   created = '',
   checked = false,
   onDeleteItem = () => {},
   onToggleDone = () => {},
   onEditItem = () => {},
+  onWorkTimer = () => {},
 }) {
   const [timeAgo, setTimeAgo] = useState(formatDistanceToNow(new Date(created)))
+
   useEffect(() => {
     const idInterval = setInterval(() => {
       setTimeAgo(formatDistanceToNow(new Date(created)))
@@ -37,9 +41,13 @@ function Task({
       <label htmlFor={inputId}>
         <span className="title">{description}</span>
         <span className="description">
-          <Button className="icon icon-play" />
-          <Button className="icon icon-pause" />
-          12:25
+          <Button
+            className={play ? 'icon icon-pause' : 'icon icon-play'}
+            onClick={onWorkTimer}
+          />
+          {/* <Button className="icon icon-play" onClick={onWorkTimer} />
+          <Button className="icon icon-pause" onClick={onWorkTimer} /> */}
+          {timer}
         </span>
         <span className="created">{`created ${timeAgo} ago`}</span>
       </label>
@@ -50,11 +58,14 @@ function Task({
 }
 
 Task.propTypes = {
+  // id: PropTypes.number.isRequired,
   description: PropTypes.node.isRequired,
   created: PropTypes.instanceOf(Date),
+  timer: PropTypes.string,
   checked: PropTypes.bool,
   onDeleteItem: PropTypes.func,
   onToggleDone: PropTypes.func,
+  onEditItem: PropTypes.func,
 }
 
 export default Task

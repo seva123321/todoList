@@ -10,6 +10,7 @@ function TaskList({
   onDeleteItem = () => {},
   onEditItem = () => {},
   onToggleDone = () => {},
+  onWorkTimer = () => {},
 }) {
   const [isEdit, setIsEdit] = useState({ edit: false, idEdit: null })
   const [label, setLabel] = useState('')
@@ -30,7 +31,16 @@ function TaskList({
   }
 
   const elements = todos.map((item) => {
-    const { id, completed, created, description, ...itemProps } = item
+    // prettier-ignore
+    const {
+      id,
+      completed,
+      created,
+      description,
+      timer,
+      play,
+      ...itemProps
+    } = item
 
     const className = completed ? 'completed' : ''
 
@@ -45,8 +55,11 @@ function TaskList({
           created={created}
           checked={completed}
           description={description}
+          timer={timer}
+          play={play}
           onDeleteItem={() => onDeleteItem(id)}
           onToggleDone={() => onToggleDone(id)}
+          onWorkTimer={() => onWorkTimer(id)}
           onEditItem={() => handleEdit(id, description)}
         />
         {isEdit.edit && isEdit.idEdit === id && (
@@ -71,12 +84,14 @@ TaskList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       description: PropTypes.string,
+      timer: PropTypes.string,
       created: PropTypes.instanceOf(Date),
     })
   ),
   onDeleteItem: PropTypes.func,
   onEditItem: PropTypes.func,
   onToggleDone: PropTypes.func,
+  onWorkTimer: PropTypes.func,
 }
 
 export default TaskList
