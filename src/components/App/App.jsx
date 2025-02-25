@@ -82,6 +82,7 @@ function reducer(todoData, action) {
     }
   }
 }
+
 function App() {
   const [todoData, dispatch] = useReducer(reducer, tasks)
   const [maxId, setMaxId] = useState(Math.max(...tasks.map((task) => task.id)))
@@ -101,7 +102,72 @@ function App() {
       })
     }, 1000)
 
-    return () => clearInterval(idTimer)
+    const setTimerInStorage = () => {
+      todoData.forEach((task) => {
+        if (task.play) {
+          const obj = {
+            timer: timeToSeconds(task.timer),
+            startBlur: Date.now(),
+          }
+          sessionStorage.setItem(task.id, JSON.stringify(obj))
+        }
+      })
+    }
+    const getTimerInStorage = () => {
+      const now = Date.now()
+      todoData.forEach((task) => {
+        if (task.play) {
+          const storedData = sessionStorage.getItem(task.id)
+          if (storedData) {
+            const obj = JSON.parse(storedData)
+            const { timer: currentTime, startBlur } = obj
+            const startTimeOffline = parseInt(startBlur, 10)
+
+            if (!Number.isNaN(startTimeOffline)) {
+              const timeOffset = Math.floor((now - startTimeOffline) / 1000)
+              const time = currentTime + timeOffset
+              dispatch({
+                type: 'update_timer',
+                id: task.id,
+                timer: secondsToTime(time),
+              })
+            }
+          }
+        }
+      })
+      sessionStorage.clear()
+    }
+
+    const handleVisibilityChange = () => {
+      const state = document.visibilityState
+
+      if (state === 'hidden') {
+        setTimerInStorage()
+      }
+
+      if (state === 'visible') {
+        getTimerInStorage()
+      }
+    }
+
+    const handleBlur = () => {
+      setTimerInStorage()
+    }
+
+    const handleFocus = () => {
+      getTimerInStorage()
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('focus', handleFocus)
+    window.addEventListener('blur', handleBlur)
+
+    return () => {
+      clearInterval(idTimer)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
+      window.removeEventListener('blur', handleBlur)
+    }
   }, [todoData])
 
   const handleAddItem = (form) => {
@@ -154,7 +220,6 @@ function App() {
     setFilter(text)
   }
 
-  // Фильтрация задач в зависимости от текущего фильтра
   const filteredTasks = () => {
     switch (filter) {
       case 'active': {
