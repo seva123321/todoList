@@ -48,6 +48,8 @@ function reducer(todoData, action) {
           description: action.description,
           created: new Date(),
           completed: false,
+          play: false,
+          timer: action.timer,
         },
       ]
     }
@@ -102,11 +104,15 @@ function App() {
     return () => clearInterval(idTimer)
   }, [todoData])
 
-  const handleAddItem = (label) => {
+  const handleAddItem = (form) => {
+    const { title, timerMin, timerSec } = form
+    const time = secondsToTime(+timerMin * 60 + +timerSec)
+
     dispatch({
       type: 'added',
       id: maxId + 1,
-      description: label,
+      description: title,
+      timer: time,
     })
     setMaxId((prevMaxId) => prevMaxId + 1)
   }
