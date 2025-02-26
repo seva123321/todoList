@@ -54,7 +54,7 @@ function TaskList({
           id={id}
           created={created}
           checked={completed}
-          description={description}
+          description={description || ''}
           timer={timer}
           play={play}
           onDeleteItem={() => onDeleteItem(id)}

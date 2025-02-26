@@ -27,7 +27,7 @@ function Task({
     return () => clearInterval(idInterval)
   }, [created])
 
-  const inputId = description.slice(0, 5) + Math.random().toFixed(3)
+  const inputId = (description + timer).slice(0, 5) + Math.random().toFixed(3)
 
   return (
     <div className="view">
