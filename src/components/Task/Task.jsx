@@ -45,8 +45,6 @@ function Task({
             className={play ? 'icon icon-pause' : 'icon icon-play'}
             onClick={onWorkTimer}
           />
-          {/* <Button className="icon icon-play" onClick={onWorkTimer} />
-          <Button className="icon icon-pause" onClick={onWorkTimer} /> */}
           {timer}
         </span>
         <span className="created">{`created ${timeAgo} ago`}</span>
@@ -58,7 +56,6 @@ function Task({
 }
 
 Task.propTypes = {
-  // id: PropTypes.number.isRequired,
   description: PropTypes.node.isRequired,
   created: PropTypes.instanceOf(Date),
   timer: PropTypes.string,
