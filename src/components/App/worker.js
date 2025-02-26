@@ -19,9 +19,19 @@ self.onmessage = (e) => {
   switch (type) {
     case 'start': {
       if (!timers.has(id)) {
+        const intervalId = setInterval(() => {
+          if (timers.has(id)) {
+            const { startTime, initialTime } = timers.get(id)
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000)
+            const totalTime = initialTime + elapsedTime
+            self.postMessage({ id, timer: secondsToTime(totalTime) })
+          }
+        }, 1000)
+
         timers.set(id, {
           startTime: Date.now(),
           initialTime: timeToSeconds(timer),
+          intervalId,
         })
       }
       break
@@ -29,17 +39,8 @@ self.onmessage = (e) => {
 
     case 'stop': {
       if (timers.has(id)) {
+        clearInterval(timers.get(id).intervalId)
         timers.delete(id)
-      }
-      break
-    }
-
-    case 'getTime': {
-      if (timers.has(id)) {
-        const { startTime, initialTime } = timers.get(id)
-        const elapsedTime = Math.floor((Date.now() - startTime) / 1000)
-        const totalTime = initialTime + elapsedTime
-        self.postMessage({ id, timer: secondsToTime(totalTime) })
       }
       break
     }
