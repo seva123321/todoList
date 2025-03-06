@@ -129,7 +129,7 @@ function App() {
 
   const handleWorkTimer = (id) => {
     const task = todoData.find((item) => item.id === id)
-    if (task) {
+    if (task && !task.completed) {
       workerRef.current.postMessage({
         type: task.play ? 'stop' : 'start',
         id,
