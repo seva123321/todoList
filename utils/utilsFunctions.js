@@ -3,7 +3,6 @@ function setNewValue(data, action, fieldBool) {
 
   const index = data.findIndex((item) => item.id === id)
   const oldItem = data[index]
-
   const newItem = fieldBool
     ? { ...oldItem, [fieldBool]: !oldItem[fieldBool] }
     : { ...oldItem, ...args }
