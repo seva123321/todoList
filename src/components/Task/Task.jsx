@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { useRef } from 'react'
+import { useRef, memo } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 
 import './Task.css'
@@ -7,7 +7,7 @@ import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 import useTodoActions from '../../hook/useTodoActions'
 
-function Task(props) {
+const Task = memo((props) => {
   // prettier-ignore
   const {
     id,
@@ -74,7 +74,7 @@ function Task(props) {
       )}
     </li>
   )
-}
+})
 
 Task.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

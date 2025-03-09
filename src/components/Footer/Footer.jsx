@@ -1,11 +1,11 @@
 import TaskFilter from '../TasksFilter/TaskFilter'
 import './Footer.css'
 import Button from '../../UI/Button/Button'
-import useTodo from '../../hook/useTodo'
+import useTodoFooter from '../../hook/useTodoFooter'
 import useTodoActions from '../../hook/useTodoActions'
 
 function Footer() {
-  const { totalTodos } = useTodo()
+  const { totalTodos } = useTodoFooter()
   const { removeAllTodo } = useTodoActions()
   return (
     <footer className="footer">

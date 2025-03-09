@@ -11,7 +11,7 @@ import { setNewValue } from '../../utils/utilsFunctions'
 
 export const TodoContext = createContext(null)
 export const TodoContextActions = createContext(null)
-
+export const FooterContext = createContext(null)
 export const initialState = [
   {
     id: 1,
@@ -90,7 +90,7 @@ export function TodoProvider({ children }) {
           timer,
         },
       ])
-      setMaxId(() => (prevMaxId) => prevMaxId + 1)
+      setMaxId((prevMaxId) => prevMaxId + 1)
     },
     [maxId]
   )
@@ -112,38 +112,36 @@ export function TodoProvider({ children }) {
     setTodosData((prev) => setNewValue(prev, { id }, 'isEdit'))
   }, [])
 
-  const isPlayTimer = useCallback(
-    (id) => {
-      const task = todosData.find((item) => item.id === id)
-
+  const isPlayTimer = useCallback((id) => {
+    setTodosData((prev) => {
+      const task = prev.find((item) => item.id === id)
       if (task && !task.completed) {
         workerRef.current.postMessage({
           type: task.play ? 'stop' : 'start',
           id,
           timer: task.timer,
         })
-
-        setTodosData((prev) => setNewValue(prev, { id }, 'play'))
+        return setNewValue(prev, { id }, 'play')
       }
-    },
-    [todosData]
-  )
+      return prev
+    })
+  }, [])
 
-  const toggleTodo = useCallback(
-    (id) => {
-      const task = todosData.find((item) => item.id === id)
-      if (task.play) isPlayTimer(id)
-
-      setTodosData((prev) => setNewValue(prev, { id }, 'completed'))
-    },
-    [todosData, isPlayTimer]
-  )
+  const toggleTodo = useCallback((id) => {
+    setTodosData((prev) => {
+      const task = prev.find((item) => item.id === id)
+      if (task && task.play) {
+        workerRef.current.postMessage({ type: 'stop', id })
+      }
+      return setNewValue(prev, { id }, 'completed')
+    })
+  }, [])
 
   const filterTodos = useCallback((typeFilter) => {
     setFilter(() => typeFilter)
   }, [])
 
-  const filteredTasks = useCallback(() => {
+  const filteredTasks = useMemo(() => {
     switch (filter) {
       case 'active':
         return todosData.filter((item) => !item.completed)
@@ -159,15 +157,17 @@ export function TodoProvider({ children }) {
     [todosData]
   )
 
-  // const todos = useMemo(() => filteredTasks(), [filteredTasks])
+  const todoContextValue = useMemo(
+    () => ({ todos: filteredTasks }),
+    [filteredTasks]
+  )
 
-  const value = useMemo(
+  const footerContextValue = useMemo(
     () => ({
-      todos: filteredTasks(),
       totalTodos,
       filter,
     }),
-    [filteredTasks, totalTodos, filter]
+    [totalTodos, filter]
   )
 
   const actions = useMemo(
@@ -196,9 +196,11 @@ export function TodoProvider({ children }) {
   )
 
   return (
-    <TodoContext.Provider value={value}>
+    <TodoContext.Provider value={todoContextValue}>
       <TodoContextActions.Provider value={actions}>
-        {children}
+        <FooterContext.Provider value={footerContextValue}>
+          {children}
+        </FooterContext.Provider>
       </TodoContextActions.Provider>
     </TodoContext.Provider>
   )

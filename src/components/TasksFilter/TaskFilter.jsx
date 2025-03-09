@@ -1,11 +1,11 @@
 import Button from '../../UI/Button/Button'
 import './TaskFilter.css'
 import useTodoActions from '../../hook/useTodoActions'
-import useTodo from '../../hook/useTodo'
+import useTodoFooter from '../../hook/useTodoFooter'
 
 function TaskFilter() {
   const { filterTodos } = useTodoActions()
-  const { filter } = useTodo()
+  const { filter } = useTodoFooter()
 
   const handleFilterClick = (typeFilter) => {
     filterTodos(typeFilter)
