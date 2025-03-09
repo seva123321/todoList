@@ -1,42 +1,44 @@
-import PropTypes from 'prop-types'
-
 import Button from '../../UI/Button/Button'
 import './TaskFilter.css'
+import useTodoActions from '../../hook/useTodoActions'
+import useTodoFooter from '../../hook/useTodoFooter'
 
-function TaskFilter({ onFilterTasks, selected }) {
+function TaskFilter() {
+  const { filterTodos } = useTodoActions()
+  const { filter } = useTodoFooter()
+
+  const handleFilterClick = (typeFilter) => {
+    filterTodos(typeFilter)
+  }
+
   return (
     <ul className="filters">
       <li>
         <Button
-          className={selected === 'all' ? 'selected' : undefined}
-          onClick={() => onFilterTasks('all')}
+          className={filter === 'all' ? 'selected' : undefined}
+          onClick={() => handleFilterClick('all')}
         >
           All
         </Button>
       </li>
       <li>
         <Button
-          className={selected === 'active' ? 'selected' : undefined}
-          onClick={() => onFilterTasks('active')}
+          className={filter === 'active' ? 'selected' : undefined}
+          onClick={() => handleFilterClick('active')}
         >
           Active
         </Button>
       </li>
       <li>
         <Button
-          className={selected === 'completed' ? 'selected' : undefined}
-          onClick={() => onFilterTasks('completed')}
+          className={filter === 'completed' ? 'selected' : undefined}
+          onClick={() => handleFilterClick('completed')}
         >
           Completed
         </Button>
       </li>
     </ul>
   )
-}
-
-TaskFilter.propTypes = {
-  selected: PropTypes.oneOf(['all', 'active', 'completed']),
-  onFilterTasks: PropTypes.func,
 }
 
 export default TaskFilter
