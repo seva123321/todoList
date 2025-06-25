@@ -1,84 +1,53 @@
 {
   "env": {
     "browser": true,
-    "worker": true,
     "es2021": true
   },
-  "ignorePatterns": ["node_modules", "dist", "build"],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
     "airbnb",
-    "airbnb/hooks"
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended"
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": { "jsx": true },
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "./tsconfig.json"
   },
-  "plugins": ["react", "prettier", "import"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "prettier",
+    "import",
+    "react-hooks",
+    "jsx-a11y"
+  ],
   "rules": {
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1,
-        "VariableDeclarator": 1,
-        "ObjectExpression": 1,
-        "ArrayExpression": 1
-      }
+    // Ваши текущие правила остаются здесь
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "no-underscore-dangle": [
+    // Добавьте специфичные для TS правила
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "import/extensions": [
       "error",
-      { "allowAfterThis": true, "allowAfterSuper": true }
-    ],
-    "prettier/prettier": "error",
-    "linebreak-style": [0, "unix"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "never"],
-    "no-plusplus": "off",
-    "comma-dangle": [
-      "error",
+      "ignorePackages",
       {
-        "arrays": "always-multiline",
-        "objects": "always-multiline",
-        "imports": "ignore",
-        "exports": "never",
-        "functions": "ignore"
-      }
-    ],
-    "object-curly-newline": [
-      "error",
-      {
-        "ObjectExpression": { "multiline": true, "minProperties": 3 },
-        "ObjectPattern": { "multiline": true, "minProperties": 6 },
-        "ImportDeclaration": { "multiline": true, "minProperties": 5 },
-        "ExportDeclaration": { "multiline": true, "minProperties": 3 }
-      }
-    ],
-    "react/react-in-jsx-scope": "off",
-    "react/require-default-props": "off",
-    "react/jsx-props-no-spreading": "off",
-    "react/prop-types": 0,
-    "import/no-unresolved": [2, { "caseSensitive": false }],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "import/order": [
-      2,
-      {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index"
-        ],
-        "newlines-between": "always"
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
       }
     ]
   },
@@ -87,9 +56,12 @@
       "version": "detect"
     },
     "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      },
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"],
-        "moduleDirectory": ["node_modules", "src/"]
+        "paths": ["src"]
       }
     }
   }
